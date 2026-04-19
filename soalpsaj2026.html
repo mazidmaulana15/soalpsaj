@@ -1,0 +1,935 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Penilaian Sumatif Akhir Jenjang</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700&family=Lato:wght@400;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+    <style>
+        /* Core Reset & Setup */
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        body {
+            background-color: #e2e8f0;
+            display: grid;
+            place-items: center;
+            min-height: 100vh;
+            font-family: 'Lato', sans-serif;
+            color: #1e293b;
+        }
+
+        /* Container Requirements */
+        .slide-container {
+            background-color: #ffffff;
+            border-radius: 8px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.15);
+            width: 100%;
+            max-width: 1280px;
+            height: 90vh;
+            min-height: 720px;
+            overflow: hidden;
+            position: relative;
+            padding: 50px 60px;
+            display: flex;
+            flex-direction: column;
+        }
+
+        @media (max-width: 768px) {
+            .slide-container {
+                padding: 20px;
+                height: 100vh;
+                min-height: 100vh;
+                border-radius: 0;
+            }
+        }
+
+        /* Typography */
+        h1, h2, h3, h4 {
+            font-family: 'Poppins', sans-serif;
+            color: #1e293b;
+        }
+
+        p {
+            font-size: 18px;
+            line-height: 1.6;
+            color: #475569;
+        }
+
+        .slide-title {
+            font-size: 32px;
+            font-weight: 700;
+            margin-bottom: 30px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            width: 100%;
+            border-bottom: 2px solid #e2e8f0;
+            padding-bottom: 15px;
+        }
+
+        @media (max-width: 768px) {
+            .slide-title {
+                font-size: 20px;
+                flex-direction: column;
+                gap: 10px;
+                align-items: flex-start;
+            }
+        }
+
+        /* Full Background Layout */
+        .full-bg-image {
+            padding: 0;
+            justify-content: center;
+            align-items: center;
+            background-position: center;
+            background-size: cover;
+        }
+
+        /* Login & Result Boxes */
+        .center-box {
+            background: rgba(255, 255, 255, 0.95);
+            padding: 50px 60px;
+            border-radius: 16px;
+            box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.25);
+            text-align: center;
+            width: 90%;
+            max-width: 600px;
+            z-index: 10;
+        }
+
+        @media (max-width: 768px) {
+            .center-box {
+                padding: 30px 20px;
+            }
+        }
+
+        .center-box .icon-circle {
+            width: 80px;
+            height: 80px;
+            background: #e0e7ff;
+            color: #4f46e5;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 40px;
+            margin: 0 auto 20px auto;
+        }
+
+        .input-group {
+            margin-bottom: 30px;
+            text-align: left;
+        }
+
+        .input-group label {
+            display: block;
+            font-weight: 700;
+            margin-bottom: 10px;
+            color: #334155;
+        }
+
+        .input-group input {
+            width: 100%;
+            padding: 16px 20px;
+            font-size: 18px;
+            border: 2px solid #cbd5e1;
+            border-radius: 8px;
+            outline: none;
+            transition: all 0.3s ease;
+            font-family: 'Lato', sans-serif;
+        }
+
+        .input-group input:focus {
+            border-color: #4f46e5;
+            box-shadow: 0 0 0 4px rgba(79, 70, 229, 0.1);
+        }
+
+        .btn-primary {
+            background: #4f46e5;
+            color: #ffffff;
+            border: none;
+            padding: 16px 32px;
+            font-size: 18px;
+            font-weight: 700;
+            border-radius: 8px;
+            cursor: pointer;
+            width: 100%;
+            transition: background 0.3s ease;
+            font-family: 'Poppins', sans-serif;
+        }
+
+        .btn-primary:hover {
+            background: #4338ca;
+        }
+
+        /* Quiz Layout */
+        .content-area {
+            display: flex;
+            flex-grow: 1;
+            gap: 40px;
+            align-items: stretch;
+            height: calc(100% - 85px);
+        }
+
+        @media (max-width: 1024px) {
+            .content-area {
+                flex-direction: column;
+                overflow-y: auto;
+                height: auto;
+            }
+        }
+
+        .quiz-left {
+            flex: 7;
+            display: flex;
+            flex-direction: column;
+            background: #ffffff;
+            border: 1px solid #e2e8f0;
+            border-radius: 12px;
+            padding: 40px;
+            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.05);
+            overflow-y: auto;
+        }
+
+        .quiz-right {
+            flex: 3;
+            display: flex;
+            flex-direction: column;
+            background: #f8fafc;
+            border: 1px solid #e2e8f0;
+            border-radius: 12px;
+            padding: 30px;
+            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.05);
+        }
+
+        @media (max-width: 768px) {
+            .quiz-left {
+                padding: 20px;
+            }
+            .quiz-right {
+                padding: 20px;
+            }
+        }
+
+        /* Question Area */
+        .q-number {
+            font-size: 24px;
+            color: #4f46e5;
+            margin-bottom: 20px;
+        }
+
+        .q-text {
+            font-size: 20px;
+            font-weight: 500;
+            color: #1e293b;
+            margin-bottom: 30px;
+            line-height: 1.5;
+        }
+
+        .options-list {
+            display: flex;
+            flex-direction: column;
+            gap: 15px;
+            flex-grow: 1;
+        }
+
+        .option-item {
+            display: flex;
+            align-items: center;
+            padding: 18px 24px;
+            border: 2px solid #e2e8f0;
+            border-radius: 10px;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            background: #ffffff;
+        }
+
+        @media (max-width: 768px) {
+            .option-item {
+                padding: 12px 16px;
+            }
+        }
+
+        .option-item:hover {
+            border-color: #a5b4fc;
+            background: #f5f8ff;
+        }
+
+        .option-item.selected {
+            border-color: #4f46e5;
+            background: #eef2ff;
+        }
+
+        .opt-label {
+            font-family: 'Poppins', sans-serif;
+            font-weight: 700;
+            color: #4f46e5;
+            margin-right: 20px;
+            font-size: 20px;
+        }
+
+        .opt-text {
+            font-size: 18px;
+            color: #334155;
+            line-height: 1.4;
+        }
+
+        /* Navigation Buttons */
+        .bottom-nav {
+            display: flex;
+            justify-content: space-between;
+            margin-top: 30px;
+            padding-top: 20px;
+            border-top: 1px solid #e2e8f0;
+        }
+
+        .btn-nav {
+            background: #ffffff;
+            color: #4f46e5;
+            border: 2px solid #4f46e5;
+            padding: 12px 24px;
+            font-size: 16px;
+            font-weight: 700;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            font-family: 'Poppins', sans-serif;
+        }
+
+        .btn-nav:hover {
+            background: #4f46e5;
+            color: #ffffff;
+        }
+
+        .btn-nav:disabled {
+            border-color: #cbd5e1;
+            color: #94a3b8;
+            cursor: not-allowed;
+            background: #ffffff;
+        }
+
+        /* Right Grid Controls */
+        .grid-title {
+            text-align: center;
+            font-size: 20px;
+            margin-bottom: 25px;
+            color: #1e293b;
+        }
+
+        .grid-container {
+            display: grid;
+            grid-template-columns: repeat(5, 1fr);
+            gap: 10px;
+            margin-bottom: 30px;
+        }
+
+        @media (max-width: 1024px) {
+            .grid-container {
+                grid-template-columns: repeat(10, 1fr);
+            }
+        }
+
+        @media (max-width: 768px) {
+            .grid-container {
+                grid-template-columns: repeat(5, 1fr);
+            }
+        }
+
+        .grid-btn {
+            aspect-ratio: 1;
+            border: 1px solid #cbd5e1;
+            background: #ffffff;
+            color: #475569;
+            border-radius: 6px;
+            font-size: 16px;
+            font-weight: 700;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-family: 'Poppins', sans-serif;
+        }
+
+        .grid-btn:hover {
+            background: #f1f5f9;
+        }
+
+        .grid-btn.answered {
+            background: #16a34a; 
+            color: #ffffff;
+            border-color: #16a34a;
+        }
+
+        .grid-btn.current {
+            outline: 3px solid #4f46e5;
+            outline-offset: -2px;
+            border-color: transparent;
+        }
+
+        .legend {
+            display: flex;
+            justify-content: center;
+            gap: 20px;
+            margin-bottom: auto;
+        }
+
+        .legend-item {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            font-size: 14px;
+            color: #475569;
+            font-weight: 700;
+        }
+
+        .legend-box {
+            width: 16px;
+            height: 16px;
+            border-radius: 4px;
+        }
+
+        .btn-submit {
+            background: #dc2626;
+            color: #ffffff;
+            border: none;
+            padding: 16px;
+            font-size: 18px;
+            font-weight: 700;
+            border-radius: 8px;
+            cursor: pointer;
+            width: 100%;
+            transition: background 0.3s ease;
+            font-family: 'Poppins', sans-serif;
+            margin-top: 20px;
+        }
+
+        .btn-submit:hover {
+            background: #b91c1c;
+        }
+
+        /* Result Specifics */
+        .score-display {
+            font-size: 120px;
+            font-weight: 700;
+            color: #4f46e5;
+            line-height: 1;
+            margin: 20px 0;
+            font-family: 'Poppins', sans-serif;
+        }
+        
+        @media (max-width: 768px) {
+            .score-display {
+                font-size: 80px;
+            }
+        }
+
+        .timer-text {
+            color: #dc2626;
+            font-family: 'Poppins', sans-serif;
+        }
+        
+        /* MathML constraints fix */
+        math {
+            font-family: 'Lato', sans-serif;
+        }
+    </style>
+</head>
+<body>
+
+    <!-- Slide 1: Login / Welcome Slide -->
+    <div class="slide-container full-bg-image" id="slide-login" style="background-image: linear-gradient(rgba(30, 41, 59, 0.8), rgba(30, 41, 59, 0.8)), url('https://images.unsplash.com/photo-1516321318423-f06f85e504b3?ixlib=rb-4.0.3&auto=format&fit=crop&w=1920&q=80');">
+        <div class="center-box">
+            <div class="icon-circle">
+                <i class="fa-solid fa-graduation-cap"></i>
+            </div>
+            <h1 style="font-size: 36px; margin-bottom: 10px;">Penilaian Sumatif</h1>
+            <p style="margin-bottom: 40px; font-size: 20px;">Akhir Jenjang - Ilmu Pengetahuan Alam</p>
+            
+            <div class="input-group">
+                <label for="student-name">Nama Lengkap Siswa</label>
+                <input type="text" id="student-name" placeholder="Masukkan nama Anda di sini..." autocomplete="off">
+                <p id="error-msg" style="color: #dc2626; font-size: 14px; margin-top: 8px; display: none; font-weight: 700;"><i class="fa-solid fa-circle-exclamation"></i> Nama tidak boleh kosong!</p>
+            </div>
+            
+            <button class="btn-primary" onclick="startQuiz()">Mulai Mengerjakan (60 Menit)</button>
+        </div>
+    </div>
+
+    <!-- Slide 2: Quiz Interface -->
+    <div class="slide-container" id="slide-quiz" style="display: none;">
+        <h2 class="slide-title">
+            <span id="header-title">Sumatif Sains: <span id="display-name" style="color: #4f46e5;"></span></span>
+            <span id="timer" class="timer-text"><i class="fa-regular fa-clock"></i> 60:00</span>
+        </h2>
+        
+        <div class="content-area">
+            <!-- Left Column: Question Content -->
+            <div class="quiz-left">
+                <h3 class="q-number" id="q-number">Soal No. 1</h3>
+                <div class="q-text" id="q-text">Memuat soal...</div>
+                
+                <div class="options-list" id="options-list">
+                    <!-- Options injected via JS -->
+                </div>
+                
+                <div class="bottom-nav">
+                    <button class="btn-nav" id="btn-prev" onclick="prevQuestion()"><i class="fa-solid fa-arrow-left"></i> Sebelumnya</button>
+                    <button class="btn-nav" id="btn-next" onclick="nextQuestion()">Selanjutnya <i class="fa-solid fa-arrow-right"></i></button>
+                </div>
+            </div>
+
+            <!-- Right Column: Navigation Controls -->
+            <div class="quiz-right">
+                <h3 class="grid-title">Navigasi Soal</h3>
+                <div class="grid-container" id="grid-container">
+                    <!-- 30 Buttons injected via JS -->
+                </div>
+                
+                <div class="legend">
+                    <div class="legend-item">
+                        <div class="legend-box" style="background: #16a34a;"></div> Dijawab
+                    </div>
+                    <div class="legend-item">
+                        <div class="legend-box" style="background: #ffffff; border: 1px solid #cbd5e1;"></div> Belum
+                    </div>
+                </div>
+                
+                <button class="btn-submit" onclick="submitQuiz()"><i class="fa-solid fa-paper-plane"></i> Kumpulkan Ujian</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Slide 3: Results -->
+    <div class="slide-container full-bg-image" id="slide-result" style="display: none; background-image: linear-gradient(rgba(248, 250, 252, 0.95), rgba(248, 250, 252, 0.95)), url('https://images.unsplash.com/photo-1523050854058-8df90110c9f1?ixlib=rb-4.0.3&auto=format&fit=crop&w=1920&q=80');">
+        <div class="center-box">
+            <div class="icon-circle" style="background: #dcfce7; color: #16a34a;">
+                <i class="fa-solid fa-check-double"></i>
+            </div>
+            <h2 style="font-size: 36px; margin-bottom: 10px;">Ujian Selesai!</h2>
+            <p id="result-student-name" style="font-size: 22px; font-weight: 700; color: #334155; margin-bottom: 20px;"></p>
+            
+            <p style="font-size: 18px;">Skor Akhir Anda:</p>
+            <div class="score-display" id="score-display">100</div>
+            
+            <p id="motivation-text" style="font-size: 20px; font-style: italic; font-weight: 700; color: #475569; padding: 0 20px;"></p>
+        </div>
+    </div>
+
+    <!-- Modal Peringatan Custom -->
+    <div id="custom-modal" style="display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.5); z-index: 100; align-items: center; justify-content: center;">
+        <div style="background: white; padding: 30px; border-radius: 12px; width: 90%; max-width: 400px; text-align: center;">
+            <h3 id="modal-title" style="margin-bottom: 15px; font-size: 24px;">Peringatan</h3>
+            <p id="modal-message" style="margin-bottom: 25px; font-size: 16px;"></p>
+            <div style="display: flex; gap: 15px; justify-content: center;">
+                <button id="modal-btn-cancel" style="padding: 10px 20px; border: 2px solid #cbd5e1; background: white; border-radius: 6px; cursor: pointer; font-weight: bold; display: none;">Batal</button>
+                <button id="modal-btn-confirm" style="padding: 10px 20px; background: #4f46e5; color: white; border: none; border-radius: 6px; cursor: pointer; font-weight: bold;">OK</button>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Database of 30 precise questions integrated with MathML for scientific notation
+        const questions = [
+            {
+                text: "Siti ingin mengetahui pengaruh jenis tanah terhadap pertumbuhan tanaman kacang hijau. Ia menanam biji kacang hijau di tiga pot berbeda dengan jenis tanah yang berbeda. Ia menyiramnya dengan jumlah air yang sama setiap hari dan mengamati tinggi tanaman setiap 3 hari sekali. Dalam metode ilmiah, variabel bebas dalam percobaan ini adalah ….",
+                options: ["jenis tanah", "tinggi tanaman", "jumlah air yang diberikan", "waktu pengamatan"],
+                answer: 0
+            },
+            {
+                text: "Budi membantu ibunya membuat teh manis. Ia menuangkan gula ke dalam segelas teh hangat, lalu mengaduknya hingga gula larut dan tidak terlihat lagi. Peristiwa pelarutan gula dalam teh tersebut termasuk perubahan ….",
+                options: ["kimia, karena gula berubah menjadi zat baru", "fisika, karena gula menghilang dan tidak bisa dikembalikan", "fisika, karena tidak terbentuk zat baru", "kimia, karena teh berubah warna menjadi lebih gelap"],
+                answer: 2
+            },
+            {
+                text: "Santo menuangkan air panas ke dalam gelas kaca. Secara tiba-tiba, gelas kaca tersebut menjadi retak. Berdasarkan fenomena tersebut, manakah pernyataan berikut yang paling tepat …",
+                options: ["gelas mengalami penyusutan secara tiba-tiba.", "bagian dalam gelas memuai lebih cepat dibanding bagian luar.", "bagian luar gelas memuai lebih cepat dibanding bagian dalam.", "gelas mengalami pemuaian yang merata."],
+                answer: 1
+            },
+            {
+                text: "Seorang anak mendorong troli belanja di sebuah supermarket. Awalnya troli tersebut diam, setelah didorong, troli mulai bergerak. Dalam hal ini, hukum Newton yang paling sesuai untuk menjelaskan peristiwa tersebut adalah….",
+                options: ["hukum I Newton, karena troli tetap diam sebelum diberi gaya dorong.", "hukum II Newton, karena gaya dorong menyebabkan perubahan kecepatan troli.", "hukum III Newton, karena troli memberikan gaya dorong balik ke anak tersebut.", "tidak ada hukum Newton yang berlaku karena troli tidak mengalami percepatan."],
+                answer: 1
+            },
+            {
+                text: "Ciri-ciri tanaman padi dalam pengelompokan tumbuhan berbiji (Spermatophyta) adalah....",
+                options: ["Berbiji tertutup, berkeping satu, akar serabut", "Berbiji terbuka, berkeping dua, akar tunggang", "Berbiji tertutup, berkeping dua, akar serabut", "Berbiji terbuka, berkeping satu, akar tunggang"],
+                answer: 0
+            },
+            {
+                text: "Sebuah desa di dekat hutan mengalami kenaikan suhu yang cukup tinggi dibandingkan tahun-tahun sebelumnya. Beberapa warga mulai menanam lebih banyak pohon di sekitar rumah mereka untuk mengurangi dampak kenaikan suhu. Manfaat utama dari tindakan warga desa tersebut terhadap lingkungan adalah….",
+                options: ["menyediakan tempat berteduh bagi burung dan serangga", "menghasilkan kayu yang bisa dimanfaatkan untuk keperluan rumah tangga", "menyerap karbon dioksida dan mengurangi efek pemanasan global", "mengurangi jumlah air hujan yang turun di daerah tersebut"],
+                answer: 2
+            },
+            {
+                text: "Bagian sel tumbuhan yang berfungsi menyimpan dan menimbun cadangan makanan, air, dan hasil fotosintesis adalah ....",
+                options: ["vakuola", "inti sel", "mitokondria", "kloroplas"],
+                answer: 0
+            },
+            {
+                text: "Mekanisme pencernaan pada organ lambung meliputi mekanisme pencernaan secara mekanik dan pencernaan secara kimia. Berikut ini proses pencernaan kimiawi yang tidak terjadi pada organ lambung adalah ….",
+                options: ["koagulasi protein susu menjadi kasein oleh renin", "mencerna protein menjadi pepton oleh pepsin", "hidrolisis lemak susu menjadi asam lemak dan gliserol", "hidrolisis zat tepung menjadi disakarida oleh enzim amilase"],
+                answer: 3
+            },
+            {
+                text: "Jantung berfungsi memompa darah untuk mengantarkan oksigen, nutrisi, dan hormon ke seluruh tubuh. Pembuluh darah yang mengalirkan darah menuju atrium kiri jantung dan pembuluh darah yang mengeluarkan darah dari ventrikel kiri jantung ke seluruh tubuh secara berturut-turut adalah ….",
+                options: ["aorta dan arteri pulmonalis", "vena cava dan vena pulmonalis", "aorta dan vena pulmonalis", "vena pulmonalis dan aorta"],
+                answer: 3
+            },
+            {
+                text: "Bagian paru-paru yang berfungsi sebagai tempat pertukaran gas oksigen dan karbon dioksida adalah ....",
+                options: ["alveolus", "bronkus", "trakea", "laring"],
+                answer: 0
+            },
+            {
+                text: "Organ ekskresi ginjal berfungsi untuk menyaring darah dan menghasilkan urine. Urutan proses terbentuknya urine adalah …",
+                options: ["filtrasi - reabsorbsi - augmentasi", "reabsorbsi - filtrasi - augmentasi", "filtrasi - augmentasi - reabsorbsi", "reabsorbsi - augmentasi - filtrasi"],
+                answer: 0
+            },
+            {
+                text: "Alat berikut ini yang menggunakan prinsip kerja tuas jenis pertama adalah ....",
+                options: ["gunting", "gerobak beroda satu", "pinset", "pembuka tutup botol"],
+                answer: 0
+            },
+            {
+                text: "Sebuah bandul berayun dari titik A ke B lalu ke C. Jika gerakan dari A-B-C-B-A dihitung sebagai 1 getaran, maka gerakan dari A ke B bernilai....",
+                options: ["1 getaran", "3/4 getaran", "1/2 getaran", "1/4 getaran"],
+                answer: 3
+            },
+            {
+                text: "Sebuah gelombang merambat dengan panjang gelombang 2 meter dan memiliki cepat rambat 4 m/s. Frekuensi gelombang tersebut adalah....",
+                options: ["2 Hz", "0,5 Hz", "8 Hz", "6 Hz"],
+                answer: 0
+            },
+            {
+                text: "Pernyataan yang benar mengenai molekul unsur dan molekul senyawa di bawah ini adalah….",
+                options: ["molekul unsur terdiri atas dua atau lebih atom yang sama, sedangkan molekul senyawa terdiri atas dua atau lebih atom yang berbeda", "molekul unsur hanya terdiri atas dua atau lebih atom yang berbeda, sementara molekul senyawa terdiri atas dua atau lebih atom yang sama", "molekul unsur memiliki ikatan ion antar atomnya, sementara molekul senyawa memiliki ikatan kovalen antar atomnya", "molekul unsur dan molekul senyawa dapat dipisahkan secara fisik"],
+                answer: 0
+            },
+            {
+                text: "Pertumbuhan dan perkembangan manusia merupakan proses yang berlangsung sejak masa bayi hingga dewasa. Berikut ini yang merupakan contoh perkembangan pada manusia adalah ….",
+                options: ["penambahan tinggi badan 5 cm dalam sebulan", "berat badan meningkat 2 kg dalam seminggu", "meningkatnya kemampuan berpikir abstrak pada remaja", "pertumbuhan kuku dan rambut yang lebih cepat"],
+                answer: 2
+            },
+            {
+                text: "Pertumbuhan dan perkembangan pada tumbuhan didukung oleh faktor internal dan faktor eksternal. Faktor internal yang mempengaruhi pertumbuhan pada tumbuhan adalah ….",
+                options: ["hormon dan genetik", "suhu dan kelembapan", "cahaya dan air", "nutrisi dan tanah"],
+                answer: 0
+            },
+            {
+                text: "Sistem koordinasi pada manusia terdiri dari sistem saraf, sistem hormon, dan indra. Hormon insulin yang diproduksi oleh pankreas memiliki fungsi utama yaitu ….",
+                options: ["meningkatkan tekanan darah", "mengatur metabolisme kalsium dalam tulang", "mengatur kadar gula darah", "meningkatkan produksi sel darah merah"],
+                answer: 2
+            },
+            {
+                text: "Organ reproduksi memiliki peranan penting dalam proses reproduksi serta menjaga keseimbangan hormon dalam tubuh. Organ reproduksi wanita yang berfungsi sebagai tempat terjadinya fertilisasi adalah ….",
+                options: ["rahim (uterus)", "tuba falopi", "vagina", "ovarium"],
+                answer: 1
+            },
+            {
+                text: "Edo menyelam di sebuah kolam renang pada kedalaman 2 meter. Jika massa jenis air kolam 1.000 kg/<math style=\"display: math;\"><msup><mi>m</mi><mn>3</mn></msup></math>, dan percepatan gravitasi bumi sebesar 10 m/<math style=\"display: math;\"><msup><mi>s</mi><mn>2</mn></msup></math>, maka tekanan hidrostatis yang dirasakan Edo di kedalaman tersebut adalah ….",
+                options: ["10 Pa", "20 Pa", "2.000 Pa", "20.000 Pa"],
+                answer: 3
+            },
+            {
+                text: "Sebuah mesin pengangkat mobil mempunyai luas penampang kecil 10 <math style=\"display: math;\"><msup><mi>cm</mi><mn>2</mn></msup></math> dan besar 2000 <math style=\"display: math;\"><msup><mi>cm</mi><mn>2</mn></msup></math>. Jika gaya tekan di penampang kecil 40 N, maka gaya angkat dipenampang besar adalah ….",
+                options: ["1000 N", "4000 N", "5000 N", "8000 N"],
+                answer: 3
+            },
+            {
+                text: "Berdasarkan Hukum Coulomb, besar gaya tarik-menarik atau tolak-menolak antara dua benda bermuatan listrik berbanding terbalik dengan ....",
+                options: ["besarnya muatan benda pertama", "besarnya muatan benda kedua", "konstanta gaya Coulomb", "kuadrat jarak antara kedua muatan"],
+                answer: 3
+            },
+            {
+                text: "Besar hambatan suatu kawat penghantar dipengaruhi oleh beberapa faktor. Berikut ini faktor yang tidak mempengaruhinya adalah....",
+                options: ["panjang kawat", "luas penampang kawat", "jenis bahan kawat", "warna kawat"],
+                answer: 3
+            },
+            {
+                text: "Bila dinyalakan dengan durasi waktu yang sama, di antara alat listrik berikut yang paling banyak menyerap energi listrik adalah ….",
+                options: ["Lampu LED 12 V, 0,5 A", "Kipas Angin DC 9 V, 1,5 A", "Lampu pijar 10 V, 1,0 A", "Lampu laser 6 V, 2,0 A"],
+                answer: 1
+            },
+            {
+                text: "Sebuah kawat berarus listrik I = 2 A membentang horizontal dengan arah arus dari utara ke selatan, berada dalam medan magnet homogen B = <math style=\"display: math;\"><msup><mn>10</mn><mrow><mo>-</mo><mn>4</mn></mrow></msup></math> T dengan arah vertikal ke atas. Bila panjang kawatnya 5 meter, maka besar dan arah gaya Lorentz yang dialami oleh kawat adalah….",
+                options: ["10 N ke barat", "10 N ke timur", "<math style=\"display: math;\"><msup><mn>10</mn><mrow><mo>-</mo><mn>3</mn></mrow></msup></math> N ke barat", "<math style=\"display: math;\"><msup><mn>10</mn><mrow><mo>-</mo><mn>3</mn></mrow></msup></math> N ke timur"],
+                answer: 2
+            },
+            {
+                text: "Berikut ini adalah tindakan yang dapat meningkatkan nilai gaya gerak listrik (GGL) induksi yang dihasilkan oleh suatu generator, kecuali….",
+                options: ["memperbanyak jumlah lilitan kumparan", "mempercepat putaran kumparan di dalam medan magnet", "menggunakan magnet yang lebih kuat", "mengubah posisi kutub magnet saat didiamkan"],
+                answer: 3
+            },
+            {
+                text: "Jenis reaksi kimia berikut ini yang menunjukkan reaksi dekomposisi (penguraian) adalah ….",
+                options: [
+                    "<math style=\"display: math;\"><msub><mi>C</mi><mn>3</mn></msub><msub><mi>H</mi><mn>8</mn></msub><mo>+</mo><mn>5</mn><msub><mi>O</mi><mn>2</mn></msub><mo>&#x2192;</mo><mn>3</mn><mi>C</mi><msub><mi>O</mi><mn>2</mn></msub><mo>+</mo><mn>4</mn><msub><mi>H</mi><mn>2</mn></msub><mi>O</mi></math>",
+                    "<math style=\"display: math;\"><mn>6</mn><mi>C</mi><msub><mi>O</mi><mn>2</mn></msub><mo>+</mo><mn>6</mn><msub><mi>H</mi><mn>2</mn></msub><mi>O</mi><mo>&#x2192;</mo><msub><mi>C</mi><mn>6</mn></msub><msub><mi>H</mi><mn>12</mn></msub><msub><mi>O</mi><mn>6</mn></msub><mo>+</mo><mn>6</mn><msub><mi>O</mi><mn>2</mn></msub></math>",
+                    "<math style=\"display: math;\"><mn>2</mn><msub><mi>H</mi><mn>2</mn></msub><mi>O</mi><mo>&#x2192;</mo><mn>2</mn><msub><mi>H</mi><mn>2</mn></msub><mo>+</mo><msub><mi>O</mi><mn>2</mn></msub></math>",
+                    "<math style=\"display: math;\"><mi>H</mi><mi>C</mi><mi>l</mi><mo>+</mo><mi>N</mi><mi>a</mi><mi>O</mi><mi>H</mi><mo>&#x2192;</mo><mi>N</mi><mi>a</mi><mi>C</mi><mi>l</mi><mo>+</mo><msub><mi>H</mi><mn>2</mn></msub><mi>O</mi></math>"
+                ],
+                answer: 2
+            },
+            {
+                text: "Bayu menyelidiki laju reaksi kimia logam Mg dengan HCl. Reaksi yang paling cepat akan terjadi pada kondisi ….",
+                options: [
+                    "Massa Mg 10 g Serbuk, HCl Pekat, suhu 40 <math style=\"display: math;\"><msup><mi></mi><mo>&#x2218;</mo></msup><mi>C</mi></math>", 
+                    "Massa Mg 10 g Pita, HCl Encer, suhu 35 <math style=\"display: math;\"><msup><mi></mi><mo>&#x2218;</mo></msup><mi>C</mi></math>", 
+                    "Massa Mg 10 g Pita, HCl Pekat, suhu 35 <math style=\"display: math;\"><msup><mi></mi><mo>&#x2218;</mo></msup><mi>C</mi></math>", 
+                    "Massa Mg 10 g Serbuk, HCl Encer, suhu 40 <math style=\"display: math;\"><msup><mi></mi><mo>&#x2218;</mo></msup><mi>C</mi></math>"
+                ],
+                answer: 0
+            },
+            {
+                text: "Bunga pukul empat berwarna merah heterozigot (Mm) disilangkan dengan bunga pukul empat berwarna putih (mm). Persentase bunga pukul empat warna putih yang dihasilkan dari persilangan tersebut adalah ....",
+                options: ["25%", "50%", "75%", "100%"],
+                answer: 1
+            },
+            {
+                text: "Salah satu solusi utama untuk mengurangi ketergantungan pada energi fosil (migas) dan mengatasi krisis energi di masa depan adalah ....",
+                options: ["mengembangkan dan memanfaatkan sumber energi alternatif yang dapat diperbarui", "memperbanyak impor minyak dari negara lain", "mencari sumur minyak baru di hutan lindung", "mengurangi penggunaan energi secara total tanpa inovasi teknologi"],
+                answer: 0
+            }
+        ];
+
+        // State Variables
+        let currentQuestion = 0;
+        let answers = new Array(30).fill(null);
+        let timeRemaining = 60 * 60; // 60 minutes in seconds
+        let timerInterval;
+        let isSubmitted = false;
+
+        // Elements
+        const slideLogin = document.getElementById('slide-login');
+        const slideQuiz = document.getElementById('slide-quiz');
+        const slideResult = document.getElementById('slide-result');
+        const inputName = document.getElementById('student-name');
+        const errorMsg = document.getElementById('error-msg');
+        const displayName = document.getElementById('display-name');
+        const timerText = document.getElementById('timer');
+        const qNumberText = document.getElementById('q-number');
+        const qTextElement = document.getElementById('q-text');
+        const optionsListElement = document.getElementById('options-list');
+        const gridContainer = document.getElementById('grid-container');
+        const btnPrev = document.getElementById('btn-prev');
+        const btnNext = document.getElementById('btn-next');
+        
+        // Modal Elements
+        const modal = document.getElementById('custom-modal');
+        const modalTitle = document.getElementById('modal-title');
+        const modalMessage = document.getElementById('modal-message');
+        const btnCancel = document.getElementById('modal-btn-cancel');
+        const btnConfirm = document.getElementById('modal-btn-confirm');
+        let confirmAction = null;
+
+        // Custom Alert/Confirm Function
+        function showModal(title, message, isConfirm, onConfirm) {
+            modalTitle.innerText = title;
+            modalMessage.innerText = message;
+            modal.style.display = "flex";
+            
+            if (isConfirm) {
+                btnCancel.style.display = "block";
+            } else {
+                btnCancel.style.display = "none";
+            }
+            
+            confirmAction = onConfirm;
+        }
+        
+        btnCancel.onclick = () => {
+            modal.style.display = "none";
+        };
+        
+        btnConfirm.onclick = () => {
+            modal.style.display = "none";
+            if (confirmAction) confirmAction();
+        };
+
+        // Functions
+        function startQuiz() {
+            const name = inputName.value.trim();
+            if(name === "") {
+                errorMsg.style.display = "block";
+                inputName.focus();
+                return;
+            }
+            
+            // Setup Quiz
+            displayName.innerText = name;
+            document.getElementById('result-student-name').innerText = name;
+            
+            // Build Grid Navigation
+            gridContainer.innerHTML = '';
+            for(let i = 0; i < 30; i++) {
+                const btn = document.createElement('button');
+                btn.className = 'grid-btn';
+                btn.innerText = i + 1;
+                btn.onclick = () => jumpToQuestion(i);
+                btn.id = `nav-btn-${i}`;
+                gridContainer.appendChild(btn);
+            }
+
+            // Load first question
+            loadQuestion(0);
+            
+            // Switch Slide
+            slideLogin.style.display = "none";
+            slideQuiz.style.display = "flex";
+            
+            // Start Timer
+            timerInterval = setInterval(updateTimer, 1000);
+        }
+
+        function updateTimer() {
+            if (timeRemaining <= 0) {
+                clearInterval(timerInterval);
+                if (!isSubmitted) {
+                    showModal("Waktu Habis", "Waktu ujian telah berakhir. Jawaban Anda akan otomatis dikumpulkan.", false, () => {
+                        processSubmission();
+                    });
+                }
+                return;
+            }
+            
+            timeRemaining--;
+            const m = Math.floor(timeRemaining / 60).toString().padStart(2, '0');
+            const s = (timeRemaining % 60).toString().padStart(2, '0');
+            timerText.innerHTML = `<i class="fa-regular fa-clock"></i> ${m}:${s}`;
+            
+            // Warning color at 5 mins
+            if(timeRemaining < 300) {
+                timerText.style.color = "#dc2626";
+                timerText.style.animation = "blink 1s infinite alternate";
+            }
+        }
+
+        function loadQuestion(index) {
+            currentQuestion = index;
+            const q = questions[index];
+            
+            qNumberText.innerText = `Soal No. ${index + 1}`;
+            qTextElement.innerHTML = q.text;
+            
+            // Render options
+            optionsListElement.innerHTML = '';
+            q.options.forEach((opt, i) => {
+                const isSelected = answers[index] === i;
+                const optDiv = document.createElement('div');
+                optDiv.className = `option-item ${isSelected ? 'selected' : ''}`;
+                optDiv.innerHTML = `<span class="opt-label">${String.fromCharCode(65+i)}</span> <div class="opt-text">${opt}</div>`;
+                optDiv.onclick = () => selectOption(i);
+                optionsListElement.appendChild(optDiv);
+            });
+            
+            // Update Grid highlights
+            updateGridStyles();
+            
+            // Update Nav Buttons
+            btnPrev.disabled = index === 0;
+            btnNext.disabled = index === questions.length - 1;
+        }
+
+        function selectOption(optIndex) {
+            answers[currentQuestion] = optIndex;
+            loadQuestion(currentQuestion); // Re-render to show selection
+        }
+
+        function updateGridStyles() {
+            for(let i = 0; i < 30; i++) {
+                const btn = document.getElementById(`nav-btn-${i}`);
+                
+                // Clear classes
+                btn.className = 'grid-btn';
+                
+                if(answers[i] !== null) {
+                    btn.classList.add('answered');
+                }
+                if(i === currentQuestion) {
+                    btn.classList.add('current');
+                }
+            }
+        }
+
+        function prevQuestion() {
+            if (currentQuestion > 0) {
+                loadQuestion(currentQuestion - 1);
+            }
+        }
+
+        function nextQuestion() {
+            if (currentQuestion < questions.length - 1) {
+                loadQuestion(currentQuestion + 1);
+            }
+        }
+
+        function jumpToQuestion(index) {
+            loadQuestion(index);
+        }
+
+        function submitQuiz() {
+            const unanswered = answers.filter(a => a === null).length;
+            if (unanswered > 0) {
+                showModal("Peringatan", `Ada ${unanswered} soal yang belum dikerjakan. Yakin ingin mengumpulkan ujian sekarang?`, true, processSubmission);
+            } else {
+                showModal("Konfirmasi", "Anda sudah menjawab semua soal. Yakin ingin mengumpulkan ujian?", true, processSubmission);
+            }
+        }
+
+        function processSubmission() {
+            isSubmitted = true;
+            clearInterval(timerInterval);
+            
+            // Calculate Score
+            let correct = 0;
+            answers.forEach((ans, i) => {
+                if (ans === questions[i].answer) correct++;
+            });
+            
+            const score = Math.round((correct / 30) * 100);
+            
+            // Show Result
+            document.getElementById('score-display').innerText = score;
+            
+            // Motivation Text based on score
+            const motText = document.getElementById('motivation-text');
+            const scoreDisplay = document.getElementById('score-display');
+            
+            if (score === 100) {
+                motText.innerText = '"Sempurna! Pengetahuan sainsmu sungguh luar biasa. Pertahankan prestasimu!"';
+                scoreDisplay.style.color = "#16a34a";
+            } else if (score >= 80) {
+                motText.innerText = '"Sangat Bagus! Usahamu membuahkan hasil yang memuaskan. Terus kembangkan potensimu!"';
+                scoreDisplay.style.color = "#4f46e5";
+            } else if (score >= 60) {
+                motText.innerText = '"Cukup Baik. Tetap semangat belajar untuk meraih hasil yang lebih maksimal di kesempatan berikutnya!"';
+                scoreDisplay.style.color = "#f59e0b";
+            } else {
+                motText.innerText = '"Jangan menyerah! Setiap kesalahan adalah pelajaran berharga. Ayo belajar lebih giat lagi!"';
+                scoreDisplay.style.color = "#dc2626";
+            }
+            
+            // Switch Slides
+            slideQuiz.style.display = "none";
+            slideResult.style.display = "flex";
+        }
+        
+        // Prevent form submission if enter key is pressed in input
+        inputName.addEventListener("keypress", function(event) {
+          if (event.key === "Enter") {
+            event.preventDefault();
+            startQuiz();
+          }
+        });
+    </script>
+</body>
+</html>
+```
